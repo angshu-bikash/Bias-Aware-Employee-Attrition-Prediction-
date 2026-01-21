@@ -58,8 +58,8 @@ The Tableau dashboard provides three distinct views tailored to specific organiz
 │   └── HR_Attrition_Dashboard_Data.csv    # Processed data for Tableau
 ├── notebooks/
 │   └── bias_attrition_analysis.ipynb      # Python analysis, modeling, and audit
-├── images/
-│   ├── shap_summary.png                   # SHAP explainability plot
+├── dashboard-report/
+│   ├── report                             # detailed report
 │   └── dashboard_screenshots/             # Dashboard visualization assets
 ├── README.md                              # Project documentation
 └── requirements.txt                       # Python dependencies
