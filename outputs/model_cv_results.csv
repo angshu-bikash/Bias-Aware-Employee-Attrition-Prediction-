@@ -1,0 +1,5 @@
+model,cv_auc_mean,cv_auc_sd,cv_pr_auc_mean,cv_pr_auc_sd
+Baseline: department only,0.6408,0.021,0.1517,0.009
+Logistic regression (L2),0.7018,0.0234,0.2215,0.0362
+Random forest,0.7071,0.0257,0.2079,0.0295
+Gradient boosting,0.7041,0.0235,0.2154,0.0236

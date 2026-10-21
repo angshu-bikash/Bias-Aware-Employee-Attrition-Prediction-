@@ -1,65 +1,106 @@
-# Bias-Aware Employee Attrition Prediction System
+# Bias-Aware Employee Attrition Prediction
 
-## Executive Summary
-This project delivers an end-to-end HR Analytics solution designed to predict employee flight risk, diagnose root causes, and audit algorithmic bias. Unlike standard black-box prediction models, this system prioritizes **Explainability (SHAP)** and **Fairness (Disparate Impact Analysis)** to ensure ethical decision-making in human resources.
+An end-to-end HR analytics project: find where voluntary attrition is concentrated, rank employees by flight risk with an explainable model, and audit that model for gender, race and age bias before anyone acts on it.
 
-The solution consists of a Machine Learning pipeline (Random Forest) and an interactive Tableau dashboard, the "Retention Command Center," which allows HR leaders to move from raw data to targeted intervention strategies.
+**Data:** a synthetic HR dataset (3,150 rows, 39 columns) with deliberately messy dates and contradictory fields. The method carries over to real data. The findings describe this dataset only.
 
-## The Retention Command Center (Dashboard)
+## Results at a glance
 
-The Tableau dashboard provides three distinct views tailored to specific organizational stakeholders:
+| | |
+|---|---|
+| Cohort | 2,865 employees, 321 voluntary leavers (11.2%) |
+| Model | Random forest, chosen by cross-validation over logistic regression, gradient boosting and a department-only baseline |
+| Test AUC | **0.688** (95% CI 0.625-0.750) vs 0.615 for the department-only baseline |
+| Top 20% flagged | catches **39%** of leavers (1.9x better than random) |
+| Gender fairness | four-fifths ratio **0.886** (watch zone); race and age bands all at or above 0.94 |
+| Honest caveat | removing job-structure features closes the gender gap but drops AUC to 0.52 (chance) |
 
-### 1. Executive Pulse (Strategy View)
-* **Target Audience:** CHRO / Executives
-* **Key Features:** Visualizes workforce stability trends and identifies high-level risk pockets.
-* **Primary Insight:** Displays the "Mid-Tenure Crisis," showing that attrition risk peaks between years 3 and 5, indicating a retention ceiling for experienced staff.
+## Dashboards: Retention Command Center (Tableau Public)
 
-### 2. HR Action List (Operational View)
-* **Target Audience:** HR Managers / Business Partners
-* **Key Features:** A triage tool that filters high-risk employees by their primary driver (e.g., Low Satisfaction, Training Expiry).
-* **Function:** Generates specific intervention scripts (e.g., "Schedule Career Progression Meeting") based on the model's output, moving beyond simple risk scoring to actionable retention steps.
+<!-- TODO(Angshu): replace with your published link and screenshots before committing -->
+**Live dashboard:** `TODO: Tableau Public URL`
 
-### 3. Fairness & Governance (Audit View)
-* **Target Audience:** Legal / Risk Officers
-* **Key Features:** A real-time audit system monitoring the model for gender and racial bias.
-* **Function:** Implements a "Traffic Light" warning system. If the Disparate Impact Ratio falls below 0.80 for any protected group, the dashboard flags those predictions for mandatory human review.
+| Executive overview | HR action list | Fairness and governance |
+|---|---|---|
+| `TODO: dashboard/screenshots/01_executive.png` | `TODO: dashboard/screenshots/02_action_list.png` | `TODO: dashboard/screenshots/03_fairness.png` |
 
-## Key Business Insights
+Build notes are in [docs/tableau_build_guide.md](docs/tableau_build_guide.md).
 
-1.  **The "Mid-Tenure" Cliff:** Analysis reveals that attrition risk does not peak at hiring but spikes significantly between Years 3 and 5. This suggests a systemic failure in career progression for mid-level employees.
-2.  **Satisfaction vs. Training:** While training intervals were analyzed, "Satisfaction Score" proved to be the dominant predictor. Employees with scores of 1 or 2 are consistently flagged as high risk, regardless of recent training history.
-3.  **Role-Specific Burnout:** The "Production Technician" role exhibits the highest risk density, isolating the problem to specific departmental conditions rather than company-wide culture.
-4.  **Algorithmic Bias Detection:** The initial model iteration revealed a Disparate Impact Ratio of 0.70 for female employees (Selection Rate: 19% vs. 13% for males). The system explicitly flags this bias to prevent automated discrimination.
+## Key findings
 
-## Technical Architecture
+**1. Attrition is a job-family problem.** Production (14.8%, n=1,944) and Software Engineering (17.9%, n=112, small sample) are far above IT (0.8%), Sales (3.2%) and Admin (1.3%). Within Production, Technician II roles leave at 23.5% versus 12.2% for Technician I.
 
-### 1. Data Processing & Engineering
-* **Data Cleaning:** Processed raw HR records containing inconsistent date formatting and negative date values (e.g., training dates logged after survey dates).
-* **Feature Engineering:**
-    * **Time-to-Event Metrics:** Calculated `Days_Since_Training` to measure skill stagnation.
-    * **Title Bucketing:** Consolidated high-cardinality job titles into top 20 categories plus an "Other" bucket to improve model generalization.
-    * **Interaction Terms:** Derived interactions between Tenure and Satisfaction to identify long-serving but disengaged employees.
+![Attrition by department](outputs/figures/01_attrition_by_department.png)
 
-### 2. Machine Learning Pipeline
-* **Model:** Random Forest Classifier.
-* **Configuration:** Utilized `class_weight='balanced'` to address class imbalance (attrition is a minority event).
-* **Optimization Strategy:** Optimized for **Recall** to minimize False Negatives, prioritizing the identification of at-risk employees over precision.
+**2. Two popular assumptions do not hold in this data.** Attrition rises gradually with tenure (9.5% to 13.7%), with no spike in years 3 to 5. Satisfaction score has no relationship with leaving (9.5% to 12.5% across scores 1 to 5).
 
-### 3. Explainability & Governance
-* **Global Explainability:** Utilized SHAP (SHapley Additive exPlanations) to rank feature importance, confirming Tenure and Role as top drivers.
-* **Local Explainability:** Generated individual risk factors for every employee (e.g., "High Risk due to Low Satisfaction + Mid-Tenure").
-* **Fairness Audit:** Calculated the Disparate Impact Ratio according to the EEOC "Four-Fifths Rule."
+![Tenure and satisfaction](outputs/figures/02_tenure_and_satisfaction.png)
 
-## Repository Structure
+**3. The model's signal is mostly department and job title.** SHAP ranks them first and second by a wide margin. Inside Production, the model's ranking AUC is only 0.60, so individual-level lists are a weak prioritisation aid. Team-level hotspots are the strongest result.
 
-```text
+![SHAP importance](outputs/figures/03_shap_global_importance.png)
+
+## Fairness audit
+
+The model never sees gender, race or age. Flagged means the top 20% of out-of-fold risk scores. The EEOC four-fifths rule is applied to the favourable outcome (not being flagged), and the flag-rate ratio is shown alongside it.
+
+| Attribute | Result |
+|---|---|
+| Gender | Women flagged 24.3%, men 14.5%. Four-fifths ratio 0.886 (95% bootstrap CI 0.856-0.916). Flag-rate ratio 0.60. |
+| Race | Lowest four-fifths ratio 0.955 |
+| Age band | Lowest four-fifths ratio 0.949 |
+
+**Why the gender gap exists.** 76% of women work in Production versus 58% of men, and Production has the highest attrition. A smaller gap remains inside Production (30.9% vs 24.2% flagged), partly because women in Production leave more often in this data.
+
+![Gender flag rate](outputs/figures/04_gender_flag_rate.png)
+
+**Fairness versus accuracy.** Refitting without title, department, division and business unit pushes the gender ratio to 0.997 but cuts AUC from 0.705 to 0.520. The information that makes the model useful is the same information that produces the disparity. No group-specific thresholds were used, since different thresholds by gender would themselves be disparate treatment. Every flag needs human review.
+
+## Method
+
+1. **Audit:** removed 150 exact duplicate rows. Found `EmployeeStatus`, `ExitDate` and `TerminationType` contradicting each other (for example, 991 "Active" employees with an exit date), so only `EmployeeStatus` defines the label.
+2. **Cohort and label:** label is "voluntarily terminated". Terminations for cause and future starters are excluded.
+3. **Model selection:** 5-fold x 3-repeat cross-validation on an 80% training split. The 20% test set is scored once. Test intervals come from a 1,000-resample bootstrap.
+4. **Scoring:** every employee gets an out-of-fold risk score from a model that never saw them. Scores are for ranking, not probabilities.
+5. **Explainability:** SHAP values per fold, aggregated from one-hot columns back to the original features. Each employee's top 3 risk-increasing features become their drivers.
+6. **Fairness:** audit on gender, race and age band, plus the fairness/accuracy trade-off test.
+
+## Limitations
+
+- Synthetic data: the relationships are simulated.
+- No time window: the label means "has left", not "will leave within N months".
+- Moderate signal: test AUC 0.69 with a wide interval.
+- Small groups: Software Engineering and department-by-gender cells are too small for firm conclusions.
+- Fairness scope: gender, race and age band only. Intersections were not tested.
+
+## Repository structure
+
+```
 ├── data/
-│   ├── Messy_HR_Dataset_Detailed.csv      # Raw input data
-│   └── HR_Attrition_Dashboard_Data.csv    # Processed data for Tableau
+│   └── Messy_HR_Dataset_Detailed.csv      # raw synthetic input
 ├── notebooks/
-│   └── bias_attrition_analysis.ipynb      # Python analysis, modeling, and audit
-├── dashboard-report/
-│   ├── report                             # detailed report
-│   └── dashboard_screenshots/             # Dashboard visualization assets
-├── README.md                              # Project documentation
-└── requirements.txt                       # Python dependencies
+│   └── attrition_analysis.ipynb           # full analysis; produces everything in outputs/
+├── outputs/
+│   ├── tableau_*.csv                      # data behind the Tableau dashboards
+│   ├── model_cv_results.csv, model_test_results.csv
+│   ├── shap_global_importance.csv, fairness_accuracy_tradeoff.csv
+│   ├── run_summary.json
+│   └── figures/                           # charts used in this README
+├── dashboard/screenshots/                 # Tableau screenshots
+├── docs/tableau_build_guide.md
+├── requirements.txt
+└── README.md
+```
+
+## How to run
+
+```bash
+pip install -r requirements.txt
+jupyter lab notebooks/attrition_analysis.ipynb   # Run All (one to two minutes)
+```
+
+The notebook is deterministic (fixed seeds) and regenerates every CSV and figure in `outputs/`.
+
+## License
+
+Apache-2.0
