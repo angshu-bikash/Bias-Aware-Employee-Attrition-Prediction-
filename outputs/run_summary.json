@@ -1,0 +1,21 @@
+{
+  "rows_raw": 3150,
+  "exact_duplicate_rows_removed": 150,
+  "dq_negative_tenure_rows": 287,
+  "dq_training_after_survey_rows": 1480,
+  "dq_status_active_but_has_exit_date": 991,
+  "cohort_rows": 2865,
+  "cohort_leavers": 321,
+  "cohort_attrition_rate": 0.112,
+  "selected_model": "Random forest",
+  "oof_auc_full_cohort": 0.7052,
+  "within_production_auc": 0.6,
+  "gender_dir_favourable": 0.8859,
+  "gender_dir_ci": [
+    0.8561,
+    0.916
+  ],
+  "gender_flag_rate_ratio_adverse": 0.5986,
+  "current_employees_scored": 2544,
+  "high_risk_current": 227
+}

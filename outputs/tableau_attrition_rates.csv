@@ -1,0 +1,44 @@
+dimension,group,n,leavers,attrition_rate,ci_low,ci_high
+DepartmentType,Admin Offices,79,1,0.0127,0.0022,0.0683
+DepartmentType,Executive Office,24,0,0.0,0.0,0.138
+DepartmentType,IT/IS,395,3,0.0076,0.0026,0.0221
+DepartmentType,Production,1944,287,0.1476,0.1326,0.1641
+DepartmentType,Sales,311,10,0.0322,0.0176,0.0582
+DepartmentType,Software Engineering,112,20,0.1786,0.1187,0.2598
+title_group,Accountant I,33,0,0.0,0.0,0.1043
+title_group,Administrative Assistant,33,1,0.0303,0.0054,0.1532
+title_group,Area Sales Manager,277,1,0.0036,0.0006,0.0202
+title_group,BI Developer,32,0,0.0,0.0,0.1072
+title_group,Data Analyst,55,2,0.0364,0.01,0.1232
+title_group,IT Support,88,0,0.0,0.0,0.0418
+title_group,Network Engineer,55,0,0.0,0.0,0.0653
+title_group,Other,238,7,0.0294,0.0143,0.0595
+title_group,Production Manager,141,17,0.1206,0.0767,0.1846
+title_group,Production Technician I,1267,154,0.1215,0.1047,0.1407
+title_group,Production Technician II,507,119,0.2347,0.1999,0.2735
+title_group,Software Engineer,89,20,0.2247,0.1504,0.3218
+title_group,Sr. Network Engineer,50,0,0.0,0.0,0.0714
+tenure_band,1-2 yrs,572,57,0.0997,0.0777,0.1269
+tenure_band,2-3 yrs,567,65,0.1146,0.091,0.1435
+tenure_band,3-4 yrs,577,77,0.1334,0.1081,0.1636
+tenure_band,4+ yrs,299,41,0.1371,0.1027,0.1807
+tenure_band,<1 yr,850,81,0.0953,0.0773,0.1169
+Satisfaction Score,1,571,60,0.1051,0.0825,0.1329
+Satisfaction Score,2,539,61,0.1132,0.0891,0.1427
+Satisfaction Score,3,581,55,0.0947,0.0735,0.1212
+Satisfaction Score,4,606,76,0.1254,0.1014,0.1542
+Satisfaction Score,5,568,69,0.1215,0.0971,0.1509
+Engagement Score,1,630,72,0.1143,0.0917,0.1415
+Engagement Score,2,584,69,0.1182,0.0944,0.1469
+Engagement Score,3,534,58,0.1086,0.085,0.1379
+Engagement Score,4,562,64,0.1139,0.0902,0.1428
+Engagement Score,5,555,58,0.1045,0.0817,0.1327
+Work-Life Balance Score,1,577,69,0.1196,0.0956,0.1486
+Work-Life Balance Score,2,562,64,0.1139,0.0902,0.1428
+Work-Life Balance Score,3,601,65,0.1082,0.0858,0.1355
+Work-Life Balance Score,4,557,66,0.1185,0.0942,0.148
+Work-Life Balance Score,5,568,57,0.1004,0.0783,0.1278
+Performance Score,Exceeds,347,33,0.0951,0.0685,0.1305
+Performance Score,Fully Meets,2259,253,0.112,0.0996,0.1257
+Performance Score,Needs Improvement,167,18,0.1078,0.0693,0.1639
+Performance Score,PIP,92,17,0.1848,0.1187,0.2761

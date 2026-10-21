@@ -1,0 +1,3 @@
+model,test_auc,auc_ci_low,auc_ci_high,test_pr_auc,precision_top20pct,recall_top20pct,lift_top20pct,n_test,n_test_leavers,base_rate
+Baseline: department only,0.6153,0.5761,0.6516,0.1409,0.1478,0.2656,1.3235,573,64,0.1117
+Random forest,0.6878,0.6252,0.7504,0.2174,0.2174,0.3906,1.9463,573,64,0.1117
